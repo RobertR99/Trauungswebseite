@@ -380,7 +380,6 @@
       <label for="teilnahme">Kannst du teilnehmen?</label>
       <select id="teilnahme" name="teilnahme">
         <option>----Bitte auswählen----</option>
-        <option value="ja_alles" id="ja_alles" hidden="true">Ich komme gerne von Anfang bis Schluss!</option>
         <option value="ja_apero" id="ja_apero">Ich komme gerne an Trauung & Apèro</option>
         <option value="nein">ich kann leider nicht teilnehmen</option>
       </select>
@@ -449,8 +448,8 @@
         document.getElementById("transfer").style.display = "block";
         document.getElementById("fest").style.display = "block";
         document.getElementById("menuSelection").style.display = "block";
-        document.getElementById("ja_alles").style.display = "block";
-        document.getElementById("ja_alles").hidden = "false";
+        //document.getElementById("ja_alles").style.display = "block";
+        //document.getElementById("ja_alles").hidden = "false";
       }
 
 
@@ -538,7 +537,7 @@ const getraenkwunsch_label = document.getElementById('getraenk_label');
 
   teilnahme.addEventListener('change', () => {
 
-      if(teilnahme.value == 'ja_alles') {
+      /*if(teilnahme.value == 'ja_alles') {
         menuSelectionElement.style.display = 'block';
         menu_label.style.display = 'block';
         begleitung.style.display = '';
@@ -550,7 +549,7 @@ const getraenkwunsch_label = document.getElementById('getraenk_label');
         getraenkwunschSelection.style.display = 'block';
         getraenkwunsch_label.style.display = 'block';
       }
-      else if(teilnahme.value == 'ja_apero'){
+      else*/ if(teilnahme.value == 'ja_apero'){
         menuSelectionElement.style.display = 'none';
         menu_label.style.display = 'none';
         begleitung.style.display = '';
