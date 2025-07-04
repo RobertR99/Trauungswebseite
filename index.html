@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mir hürote!</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+    :root {
+      --main-green: #4d7358;
+      --accent-green: #cfe1d3;
+      --background: #f8fdf9;
+      --text: #2f4f4f;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: url('bilder/hochzeit.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 4rem 2rem;
+      text-align: center;
+      border-bottom: 2px solid #e0eee7;
+    }
+
+    h1 {
+      color: var(--main-green);
+      font-size: 9rem;
+      margin-bottom: 1rem;
+      font-family: 'Great Vibes', cursive;
+    }
+
+    p.subtitle {
+      font-size: 1.3rem;
+      color: #444;
+    }
+
+    #countdown {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--main-green);
+      margin-top: 1rem;
+    }
+
+    section {
+      padding: 3rem 1rem;
+      max-width: 70%;
+      margin: 0 auto;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      margin-top: 2rem;
+      animation: fadeIn 1.5s ease-in-out;
+      overflow: hidden;
+    }
+
+    .timeline {
+      position: relative;
+      margin: 4rem 0;
+      overflow: hidden;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 90%;
+      background: var(--main-green);
+      z-index: 0;
+    }
+
+    .timeline-event {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 40%;
+      position: relative;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      animation: fadeInUp 1s ease forwards;
+      opacity: 0;
+      z-index: 1;
+      overflow-wrap: break-word;
+      overflow: hidden;
+      margin-left: auto;
+      margin-right: auto;
+      clear: both;
+    }
+
+.timeline-event::after {
+      content: '';
+      position: absolute;
+      top: 1.5rem;
+      width: 20px;
+      height: 15px;
+      background: var(--accent-green);
+      border: 3px solid var(--main-green);
+      border-radius: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+        /* ---------- Slideshow ---------- */
+    .slideshow {
+      position: relative;
+      /*max-width: 500px;      /* Breite nach Wunsch */
+      margin: 2rem auto;     /* zentriert */
+      aspect-ratio: 3 / 2;   /* verhindert Springen, passt zu 500×333 px */
+      overflow: hidden;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.12);
+    }
+
+    /* alle Bilder übereinander stapeln */
+    .slideshow img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;   /* >> kein Verzerren, ganze Bildfläche sichtbar */
+      object-position: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+      margin: 8px;
+    }
+
+    /* nur das aktive Bild sichtbar */
+    .slideshow img.active {
+      opacity: 1;
+    }
+
+    /* --- Buttons --- */
+.slide-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(77,115,88,0.7);
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  padding: .4rem .8rem;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 3;
+}
+.slide-btn.prev { left: 10px; }
+.slide-btn.next { right: 10px; }
+.slide-btn:hover { background: rgba(62,89,71,0.8); }
+
+/* --- Dots --- */
+.dots {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: .5rem;
+  z-index: 3;
+}
+.dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: rgba(77,115,88,0.5);
+  cursor: pointer;
+  transition: background .3s;
+}
+.dot.active,
+.dot:hover { background: rgba(77,115,88,1); }
+
+    form {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      margin-top: 2rem;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    input[type="submit"] {
+      background-color: var(--main-green);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #3e5947;
+    }
+
+    .menu-selection {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mir hürote!</h1>
+    <p class="subtitle">🤍🎵🤍 Maybe we found love right where we are 🤍🎵🤍</p>
+    <div id="countdown"></div>
+  </header>
+
+  <section>
+    <h2>Info</h2>
+    <p> Wir laden dich/euch zu unserer Hochzeit am 16.08.2025 ein.</p>
+    <p> Wir würden uns freuen wenn du/ihr uns bei unserem Tag begleiten würdet. </p>
+    <p>Melde/t dich/euch doch per Anmeldeformular bis zum 20.07.2025 an. </p>
+    <p>Wir freuen uns auf dich/euch!</p>
+  </section>
+
+  <section>
+    <h2>Ablauf</h2>
+    <div class="timeline">
+      <div class="timeline-event">
+        <h3>Eintreffen beim Trauort</h3>
+        <p>13:30 beim Brennten Buur</p>
+      </div>
+      <div class="timeline-event">
+        <h3>Trauung</h3>
+        <p>14:00</p>
+      </div>
+       <div class="timeline-event">
+        <h3>Apéro</h3>
+        <p>Ab 15:00 Uhr bis 18:00 Uhr</p>
+      </div>
+      <div class="timeline-event" id="transfer" style="display:none;">
+        <h3>Kutschenrundfahrt für das Brautpaar</h3>
+        <p>Abholung ca 17:00 Uhr</p>
+      </div>
+      <div class="timeline-event" id="abendessen" style="display:none;">
+        <h3>Abendessen</h3>
+        <p>Der Grill wird um ca 19:00 Uhr angefeuert werden. Dazu gibt es eine Salatauswahl.</p>
+      </div>
+      <div class="timeline-event" id="fest" style="display:none;">
+        <h3>Gemütliches Beisammensein & Party</h3>
+        <p>Nach dem Essen beim Brenten Buur</p>
+      </div>
+    </div>
+  </section>
+
+
+  <section>
+    <h2>Anreise / Location</h2>
+    <div id="trauLocation" style="margin-top: 1rem;">
+    <h3>Brenten Buur</h3>
+    <p>Unsere Hochzeit findet auf dem Bauernhof von Brenten Buur statt.</p>
+    </div>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30982.298597786557!2d7.742641393915475!3d47.43139618833497!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479033ce09c26cf1%3A0xc70f09af0b69f761!2sHofladen%2C%20Eventraum!5e1!3m2!1sen!2sch!4v1745492950345!5m2!1sen!2sch" width="50%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>  
+    <div>
+    <h3>Information zu Parkplätzen und Anreise via ÖV</h3>
+      Bushaltestelle: Diegten Hirschen <br>
+      Laufweg zum Bauernhof: 20 Minuten<br>
+      <br>
+      Bei folgender Verbindung können wir bei Bedarf einen Shuttle organisieren:<br>
+      Bus Nr. 107 von Sissach Bahnhof ab 13:07 -> 13:18 Ankuft Diegten Hirschen<br>
+      <br>
+      <b>Parkplatz</b> <br>
+      Es hat wenige Parkplätze beim Bauernhof, auf denen Gäste mit eingeschränkter Mobilität Vorrang haben. <br>
+      Weitere Parkplätze gibt es beim Schützenweg 1 4457 Diegten. Von dort aus braucht man 10 Minuten zu Fuss.
+  </section>
+
+  <section class="slideshow" id="slideshow">
+    <img src="bilder/hochzeit.jpeg" alt="Bild1" class="active"/>
+    <img src="bilder/65cdb986-2923-4cae-9090-e987b3591b8a.jpeg" alt="Bild2"/>
+    <img src="bilder/79f34aa8-696e-44d4-a208-15dc82f15263.jpeg" alt="Bild3"/>
+    <img src="bilder/98f45069-47bb-4067-97fd-c00addc020f3.jpeg"/>
+    <img src="bilder/A22218D2-4616-4EE7-A6E4-314C18646AFF.jpeg"/>
+    <img src="bilder/aab67edf-4556-4e25-90e1-a1a210b66136.jpeg"/>
+    <img src="bilder/IMG_0034.jpeg"/>
+    <img src="bilder/IMG_0339.jpeg"/>
+    <img src="bilder/IMG_0562.jpeg"/>
+    <img src="bilder/IMG_0953.jpeg"/>
+    <img src="bilder/IMG_0986.jpeg"/>
+    <img src="bilder/IMG_1316.jpeg"/>
+    <img src="bilder/IMG_1340.jpeg"/>
+    <img src="bilder/IMG_1520.jpeg"/>
+    <img src="bilder/IMG_1758.jpeg"/>
+    <img src="bilder/IMG_1868.jpeg"/>
+    <img src="bilder/IMG_2321.jpeg"/>
+    <img src="bilder/IMG_2448.jpeg"/>
+    <img src="bilder/IMG_2646.jpeg"/> 
+    <img src="bilder/IMG_2699.jpeg"/>
+    <img src="bilder/IMG_9931.jpeg"/>
+    <img src="bilder/IMG_9610.jpeg"/>
+    <img src="bilder/IMG_9464.jpeg"/>
+    <img src="bilder/IMG_8667.jpeg"/>
+    <img src="bilder/IMG_7580.jpeg"/>
+    <img src="bilder/IMG_5996.jpeg"/> 
+    <img src="bilder/IMG_5770.jpeg"/>
+    <img src="bilder/IMG_2713.jpeg"/>
+    <img src="bilder/IMG_4109.jpeg"/>
+    <img src="bilder/IMG_5367.jpeg"/>
+    <img src="bilder/IMG_5364.jpeg"/>
+    <img src="bilder/IMG_4959.jpeg"/>
+    <img src="bilder/IMG_4704.jpeg"/>
+    <img src="bilder/IMG_4688.jpeg"/>
+    <img src="bilder/IMG_4660.jpeg"/>
+    <img src="bilder/IMG_4492.jpeg"/>
+    <img src="bilder/IMG_4190.jpeg"/>
+
+    <!-- Navigations‑Elemente -->
+  <button id="slidePrev" class="slide-btn prev">❮</button>
+  <button id="slideNext" class="slide-btn next">❯</button>
+  <div id="dots" class="dots"></div>
+  </section>
+
+  
+  <section>
+    <h2>Dresscode</h2>
+    <div>
+      Wir möchten dass ihr euch alle wohl fühlt bei unserer Hochzeit. Dennoch haben wir ein paar Wünsche betreffend Bekleidung.
+        <div>- Casual Chique</br>
+        - Kein weiss</br>
+        - Kein Rot</div>
+        <p>Wir haben ein Mood board mit Farben, an denen wir uns an der Hochzeit orientieren werden. Ihr dürft euch daran orientieren, müsst ihr aber nicht:</p>
+          <img src="bilder/moodboard.jpg" width="70%"/>
+    </div>
+  </section>
+
+  <section>
+    <h2>Anmeldung</h2>
+    <form action="https://formsubmit.co/michele.und.robert.heiraten@gmx.ch" method="POST">
+      <!-- Formsubmit Optionen -->
+      <input type="hidden" name="_subject" value="Neue Hochzeitsanmeldung">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="danke.html">
+
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="teilnahme">Kannst du teilnehmen?</label>
+      <select id="teilnahme" name="teilnahme">
+        <option>----Bitte auswählen----</option>
+        <option value="ja_alles" id="ja_alles" hidden="true">Ich komme gerne von Anfang bis Schluss!</option>
+        <option value="ja_apero" id="ja_apero">Ich komme gerne an Trauung & Apèro</option>
+        <option value="nein">ich kann leider nicht teilnehmen</option>
+      </select>
+
+        <label for="anreise" id="anreise_label" style="display: none">Art der Anreise</label>
+      <select id="anreise" name="anreise" style="display: none">
+        <option>----Bitte auswählen----</option>
+        <option value="auto" id="auto">Ich komme mit dem Auto & möchte dort parkieren</option>
+        <option value="shuttle" id="shuttle">Ich möchte gern den Shuttle von der Bushaltestelle nehmen</option>
+        <option value="other" id="other">Ich reise anderweitig an</option>
+      </select>
+
+
+      <label for="begleitung" id="begleitung_label" style="display: none;">Möchtest du in Begleitung kommen?</label>
+      <input type="checkbox" id="begleitung" name="begleitung" style="display: none;">
+
+      <label for="begleitung_name" id="begleitung_name_label" style="display: none;">Wie heisst deine Begleitung?</label>
+      <input type="text" id="begleitung_name" name="begleitung_name" style="display: none;">
+
+      <div class="menu-selection" id="menuSelection">
+        <label for="menu" id="menu_label" style="display: none;">Essenswunsch:</label>
+        <select id="menu" name="menu" style="display: none;" required>
+          <option>----Bitte Wähle dein präferiertes Essen aus----</option>
+          <option value="fleisch">Fleischvariation vom Grill</option>
+          <option value="vegan">Vegane Grillvariation</option>
+        </select>
+      </div>
+
+      <label for="liederwunsch" id="liederwunsch_label" style="display: none;">Das Lied darf deiner Meinung nach an unserer Hochzeit nicht fehlen:</label>
+      <input type="text" id="liederwunsch" name="liederwunsch" style="display: none;">
+
+      <label for="getraenk" id="getraenk_label" style="display: none;">Welches Getränk darf an einer Party nicht fehlen:</label>
+      <input type="text" id="getraenk" name="getraenk" style="display: none;">
+
+      <label for="nachricht">Nachricht (optional):</label>
+      <textarea id="nachricht" name="nachricht"></textarea>
+
+      <input type="submit" value="Absenden" />
+    </form>
+
+  </section>
+
+
+  <section>
+    <h2>Kontakt bei Fragen</h2>
+    Kontaktiert uns oder unsere Trauzeugen.
+  </section>
+
+  
+  <section>
+    <h2>Geschenke</h2>
+    Reiskocher, Thermomix, Tellersets & Co sind zwar toll, brauchen wir aber nicht.
+    <br> Wenn ihr uns etwas schenken wollt, freuen wir uns über eine kreative Beteiligung an der Hochzeit oder Flitterwochen. 💙
+  </section>
+
+  <script>
+
+      const gruppe = new URLSearchParams(window.location.search).get("gruppe");
+      if (gruppe !== "apero" && gruppe !== "essen") {
+        document.body.style.background = "white";
+        document.body.innerHTML = "<h2>Zugriff verweigert</h2><p>Bitte verwende deinen persönlichen Link.</p>";
+      }
+
+      if (gruppe === "essen") {
+        document.getElementById("abendessen").style.display = "block";
+        document.getElementById("transfer").style.display = "block";
+        document.getElementById("fest").style.display = "block";
+        document.getElementById("menuSelection").style.display = "block";
+        document.getElementById("ja_alles").style.display = "block";
+        document.getElementById("ja_alles").hidden = "false";
+      }
+
+
+    const initSlideshow = function() {
+      const slides = document.querySelectorAll('#slideshow img');
+      const prevBtn  = document.getElementById('slidePrev');
+      const nextBtn  = document.getElementById('slideNext');
+      const dotsWrap = document.getElementById('dots');
+
+      let idx = 0;
+      let autoplayId;
+
+      /* --- Hilfsfunktionen --- */
+      function showSlide(i) {
+        slides.forEach((img, k) => {
+          img.classList.toggle('active', k === i);
+          dotsWrap.children[k].classList.toggle('active', k === i);
+        });
+      }
+      function nextSlide()  { idx = (idx + 1) % slides.length; showSlide(idx); }
+      function prevSlide()  { idx = (idx - 1 + slides.length) % slides.length; showSlide(idx); }
+      function startAuto()  { autoplayId = setInterval(nextSlide, 3500); }
+      function stopAuto()   { clearInterval(autoplayId); }
+
+      /* --- Dots dynamisch erzeugen --- */
+      slides.forEach(() => {
+        const dot = document.createElement('span');
+        dot.className = 'dot';
+        dotsWrap.appendChild(dot);
+      });
+
+      /* --- Events --- */
+      nextBtn.addEventListener('click', nextSlide);
+      prevBtn.addEventListener('click', prevSlide);
+      dotsWrap.addEventListener('click', e => {
+        if (e.target.classList.contains('dot')) {
+          idx = [...dotsWrap.children].indexOf(e.target);
+          showSlide(idx);
+        }
+      });
+      document.getElementById('slideshow').addEventListener('mouseenter', stopAuto);
+      document.getElementById('slideshow').addEventListener('mouseleave', startAuto);
+
+      /* --- Start --- */
+      showSlide(idx);
+      startAuto();
+    }
+
+    /* ===================================================== */
+
+
+//START begleitung Name anzeigen oder nicht
+  const begleitung = document.getElementById('begleitung');
+  const begleitung_label = document.getElementById('begleitung_label');
+  const begleitung_name = document.getElementById('begleitung_name');
+  const begleitung_name_label = document.getElementById('begleitung_name_label');
+
+  begleitung.addEventListener('change', () => {
+    if (begleitung.checked) {
+      begleitung_name.style.display = 'block';
+      begleitung_name_label.style.display = 'block';
+    } else {
+      begleitung_name.style.display = 'none';
+      begleitung_name_label.style.display = 'none';
+    }
+  });
+//END Begleitung Name anzeigen oder nicht
+
+// GET Fields for Travel "anreise"
+const anreiseSelection = document.getElementById('anreise');
+const anreise_label = document.getElementById('anreise_label');
+
+//GET Fields Liederwunsch
+const liederwunschSelection = document.getElementById('liederwunsch');
+const liederwunsch_label = document.getElementById('liederwunsch_label');
+
+//GET Fields Liederwunsch
+const getraenkwunschSelection = document.getElementById('getraenk');
+const getraenkwunsch_label = document.getElementById('getraenk_label');
+
+//START Essensauswahl anzeigen oder nicht
+  const teilnahme = document.getElementById('teilnahme');
+  const menuSelectionElement = document.getElementById('menu');
+  const menu_label = document.getElementById('menu_label');
+
+  teilnahme.addEventListener('change', () => {
+
+      if(teilnahme.value == 'ja_alles') {
+        menuSelectionElement.style.display = 'block';
+        menu_label.style.display = 'block';
+        begleitung.style.display = '';
+        begleitung_label.style.display = 'block';
+        anreiseSelection.style.display = 'block';
+        anreise_label.style.display = 'block';
+        liederwunschSelection.style.display = 'block';
+        liederwunsch_label.style.display = 'block';
+        getraenkwunschSelection.style.display = 'block';
+        getraenkwunsch_label.style.display = 'block';
+      }
+      else if(teilnahme.value == 'ja_apero'){
+        menuSelectionElement.style.display = 'none';
+        menu_label.style.display = 'none';
+        begleitung.style.display = '';
+        begleitung_label.style.display = 'block';
+        anreiseSelection.style.display = 'block';
+        anreise_label.style.display = 'block';
+        liederwunschSelection.style.display = 'none';
+        liederwunsch_label.style.display = 'none';
+        getraenkwunschSelection.style.display = 'none';
+        getraenkwunsch_label.style.display = 'none';
+      }
+      else {
+        menuSelectionElement.style.display = 'none';
+        menu_label.style.display = 'none';
+        begleitung.style.display = 'none';
+        begleitung_label.style.display = 'none';
+
+        begleitung.checked = false;
+        begleitung_name.style.display = 'none';
+        begleitung_name_label.style.display = 'none';
+
+        anreiseSelection.style.display = 'none';
+        anreise_label.style.display = 'none';
+
+        liederwunschSelection.style.display = 'none';
+        liederwunsch_label.style.display = 'none';
+
+        getraenkwunschSelection.style.display = 'none';
+        getraenkwunsch_label.style.display = 'none';
+      }
+    });
+//END Essensauswahl anzeigen oder nicht
+
+    // Countdown Script
+    const countdownElement = document.getElementById("countdown");
+    const weddingDate = new Date("2025-08-16T00:00:00").getTime();
+
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const distance = weddingDate - now;
+
+      if (distance <= 0) {
+        countdownElement.innerHTML = "💍 Heute ist der grosse Tag!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownElement.innerHTML = `${days} Tage ${hours} Std ${minutes} Min ${seconds} Sek`;
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initSlideshow(); 
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    });
+
+  </script>
+</body>
+</html>
