@@ -372,7 +372,7 @@
       <!-- Formsubmit Optionen -->
       <input type="hidden" name="_subject" value="Neue Hochzeitsanmeldung">
       <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_next" value="danke.html">
+      <input type="hidden" name="_next" value="https://robertr99.github.io/Trauungswebseite//danke.html">
 
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" required />
@@ -537,19 +537,7 @@ const getraenkwunsch_label = document.getElementById('getraenk_label');
 
   teilnahme.addEventListener('change', () => {
 
-      /*if(teilnahme.value == 'ja_alles') {
-        menuSelectionElement.style.display = 'block';
-        menu_label.style.display = 'block';
-        begleitung.style.display = '';
-        begleitung_label.style.display = 'block';
-        anreiseSelection.style.display = 'block';
-        anreise_label.style.display = 'block';
-        liederwunschSelection.style.display = 'block';
-        liederwunsch_label.style.display = 'block';
-        getraenkwunschSelection.style.display = 'block';
-        getraenkwunsch_label.style.display = 'block';
-      }
-      else*/ if(teilnahme.value == 'ja_apero'){
+   if(teilnahme.value == 'ja_apero'){
         menuSelectionElement.style.display = 'none';
         menu_label.style.display = 'none';
         begleitung.style.display = '';
